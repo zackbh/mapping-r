@@ -1,0 +1,101 @@
+---
+title: 'ECON 452: Mapping in R'
+author: "Dr. Zachary Barnett-Howell"
+date: "10/18/2020"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Learning to program
+
+Programming is just learning a new language. There are vocabulary and syntactical rules that combine to produce meaning. Just like speaking or writing. A major challenge when learning a new language is finding something interesting to say with the vocabulary and rules that you have available. Most programming courses begin with a "Hello world" example.
+
+```{r hello_world, echo = T}
+string <- "Hello world"
+print(string)
+```
+
+Then we move on to basic arithmetic and mathematical functions, which is all well and good. But then what? You can learn to program regression packages, but this is generally a waste of time as existing libraries for regressions are very good, and realistically you're not learning much about programming, just about stringing linear algebraic expressions together. This leads directly into the joke about how to draw an owl (you can look this up on your own).
+
+These challenges aren't unique, of course. Students learning a non-programming language also encounter a plateau when they can successfully introduce themselves, but can't get around to more interesting topics. The point of this assignment is to try to say something more interesting using R. 
+
+# Learning to program, literally
+
+There are approximately two ways to learn how to program:
+
+1. Read the manual
+1. Google it
+
+## Reading the manual
+
+Programming involves a combination of using the base functions provided within the language and a set of libraries or packages. The base functions in R (and Python, and JavaScript, and every other language) constitute the basic syntax that you will use to manipulate objects and create functions. However, for almost everything you do, you will end up using preexisting packages. This is a good thing: generally you want to solve a problem in a domain-specific field, not become a programmer.
+
+Packages in R often come with "vignettes," which are worked examples of how to use the provided functions. Packages are typically designed to be consistent with base R, but may have their own particular rules and syntax. Reading these vignettes is an easy and obvious way to start learning how to use the provided functions. Some packages in R even have entire books available, free and online for you to read. Others have condensed cheat-sheets, which provide a shortened version of the most important package attributes.
+
+> 1. [RMarkdown textbook](https://bookdown.org/yihui/rmarkdown/) 
+> 2. [Data science textbook](https://r4ds.had.co.nz)
+> 3. [ggplot2 textbook](https://ggplot2-book.org)
+
+SO READ THE MANUAL
+
+There isn't much of a way around it. You need to read the manual if you want to learn how to use R.
+
+### What if there's no manual?
+
+Because packages in R are user created, they do not necessarily come with vignettes. In almost all cases each function will still have some description of the arguments it takes and the outputs it provide. You can access these descriptions with the `?` operator.
+
+```{r query, echo = T}
+?lm
+(mod <- lm(lifeExp ~ pop + gdpPercap + factor(year), data = gapminder::gapminder))
+class(mod)  # What does `class` do?
+str(mod)    # What does `str` do?
+```
+
+#### What if there's no description?
+
+Worst case scenario, you need to figure out what a function is doing and the author hasn't written any description of the function. You can call up each function's code by calling the function _without_ parantheses:
+
+```{r code, echo = T}
+head(lm, 10)
+```
+
+## Using the web
+
+There is a wealth of useful information online, you just need to look for it. The website StackOverflow is generally your friend, although check the date on when answers were posted. Answers from 2008 or so have probably been superseded by newer libraries and packages. For this assignment searches for "rayshader AND R" will be useful.
+
+# Mapping in R
+
+I want you to create a map in R. This is good practice because maps are fun to look at, and require you to use a number of packages and deal with fairly complex objects. Maps are strange objects that require their own data structures. There's also no one right construction that will be sufficient for this problem. So take a little time, explore the libraries, and create something that **you** find interesting.
+
+```{r requisite-packages, echo =T}
+library(raster)
+library(rayshader)
+```
+
+We use the `raster` package to get map data, and the `rayshader` to visualize it. The manual for raster is [here](https://rspatial.org/raster/)
+
+The manual for rayshader is [here](https://www.rayshader.com)
+
+You can get map data from raster that includes either altitudes ("alt") or global administrative boundaries ("GADM").
+
+## An approximate algorithm
+
+1. Pick a country, a set of countries, or a subset of a country. 
+1. Have a reason for picking a region. Can you include this as part of your research paper or something else? Creating maps can be fun, but it's certainly better if you can use it as part of a larger project.
+1. Get altitude data from the raster package with `raster::getData('alt', country = )` which creates a RasterLayer object.
+1. You can merge areas together with the `raster::merge()` function
+1. Try the `plot` function on the data that you've gathered. Then look at the structure.
+1. Convert the altitude data into matrix format with `raster_to_matrix()` so you can feed into it `rayshader` functions.
+1. You can add effects with rayshader, including `detect_water()`, `ray_shade()`, and `ambient_shade()` functions.
+1. Consult the [manual](https://www.rayshader.com/index.html), again 
+1. Add the effects together an create a map
+1. Print it as a .pdf file
+1. Make sure the map shows us something meaningful
+
+
+ 
